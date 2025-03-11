@@ -55,9 +55,9 @@ public class BenchmarkTest00018 extends HttpServlet {
 
         try {
             java.sql.PreparedStatement() stmt = conn.prepareStatement(sql);
-            stmt.setString(1,'foo');
+            stmt.setString(1,"foo");
             stmt.setString(2,param);
-            int count = statement.executeUpdate(sql);
+            int count = stmt.executeUpdate(sql);
             org.owasp.benchmark.helpers.DatabaseHelper.outputUpdateComplete(sql, response);
         } catch (java.sql.SQLException e) {
             if (org.owasp.benchmark.helpers.DatabaseHelper.hideSQLErrors) {
