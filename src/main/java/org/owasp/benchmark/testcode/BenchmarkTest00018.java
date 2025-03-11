@@ -51,11 +51,12 @@ public class BenchmarkTest00018 extends HttpServlet {
         // URL Decode the header value since req.getHeaders() doesn't. Unlike req.getParameters().
         param = java.net.URLDecoder.decode(param, "UTF-8");
 
-        String sql = "INSERT INTO users (username, password) VALUES ('foo','" + param + "')";
+        String sql = "INSERT INTO users (username, password) VALUES ('?','?')";
 
         try {
-            java.sql.Statement statement =
-                    org.owasp.benchmark.helpers.DatabaseHelper.getSqlStatement();
+            java.sql.PreparedStatement() stmt = conn.prepareStatement(sql);
+            stmt.setString(1,'foo');
+            stmt.setString(2,param);
             int count = statement.executeUpdate(sql);
             org.owasp.benchmark.helpers.DatabaseHelper.outputUpdateComplete(sql, response);
         } catch (java.sql.SQLException e) {
