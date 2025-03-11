@@ -18,6 +18,8 @@
 package org.owasp.benchmark.testcode;
 
 import java.io.IOException;
+import java.sql.Connection;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -48,12 +50,14 @@ public class BenchmarkTest00034 extends HttpServlet {
             if (values != null) param = values[0];
         }
 
-        String sql = "SELECT * from USERS where USERNAME='foo' and PASSWORD='" + param + "'";
+        String sql = "SELECT * from USERS where USERNAME='foo' and PASSWORD='?'";
 
         try {
-            java.sql.Statement statement =
-                    org.owasp.benchmark.helpers.DatabaseHelper.getSqlStatement();
-            statement.execute(sql, java.sql.Statement.RETURN_GENERATED_KEYS);
+
+            Connection conn = org.owasp.benchmark.helpers.DatabaseHelper.getSqlConnection();
+            java.sql.PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(0,param);
+            ResultSet rs = stmt.executeQuery();           
             org.owasp.benchmark.helpers.DatabaseHelper.printResults(statement, sql, response);
         } catch (java.sql.SQLException e) {
             if (org.owasp.benchmark.helpers.DatabaseHelper.hideSQLErrors) {
